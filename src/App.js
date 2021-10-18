@@ -1,23 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import AddUser from "./AddUser/AddUser";
+import { useState } from "react";
+import DisplayUserItem from "./DisplayUsers/DisplayUserItem";
+import Modal from "./UI/Modal";
 
 function App() {
+  const [userList, setUserList] = useState([]);
+  const [error, setError] = useState("");
+
+  function addUserFunction(userInput) {
+    setUserList(() => {
+      return [...userList, userInput];
+    });
+  }
+
+  function errorMessage(errorMessage) {
+    setError(errorMessage);
+  }
+
+  function resetErrorMessage() {
+    setError("");
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AddUser
+        addUserHandler={addUserFunction}
+        handleErrorMessage={errorMessage}
+      />
+      <ul>
+        {userList.map((user) => (
+          <DisplayUserItem name={user.name} age={user.age} key={user.id} />
+        ))}
+      </ul>
+      <Modal error={error} resetErrorMessage={resetErrorMessage} />
     </div>
   );
 }
